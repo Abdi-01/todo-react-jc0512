@@ -18,9 +18,11 @@
   ],
   "users": [
     {
-      "id": "1",
-      "username": "ads123",
-      "password": "123"
+      "id": "3e68",
+      "firstname": "Abdi",
+      "lastname": "Code",
+      "email": "abdi@code.com",
+      "password": "1234"
     }
   ]
 }
