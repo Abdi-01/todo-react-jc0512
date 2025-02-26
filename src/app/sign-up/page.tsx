@@ -35,8 +35,15 @@ const SignUp = () => {
     }
   };
 
-  const onSignUp = async () => {
+  const onSignUp = async (values: IFormValue) => {
     try {
+      const response = await apiCall.post("/users", {
+        firstname: values.firstname,
+        lastname: values.lastname,
+        email: values.email,
+        password: values.password,
+      });
+      toast(`Periksa email ${response.data.email} anda`);
     } catch (error: any) {
       console.log(error);
       toast(error);
@@ -60,8 +67,8 @@ const SignUp = () => {
               }}
               validationSchema={SignUpSchema}
               onSubmit={(values) => {
-                //
-                console.log(values);
+                console.log("Data from input", values);
+                onSignUp(values);
               }}
             >
               {(props: FormikProps<IFormValue>) => {
@@ -69,72 +76,79 @@ const SignUp = () => {
                 console.log("Error message from yup", errors);
 
                 return (
-                  <div className="py-2 md:py-6 space-y-5">
-                    <div className="flex gap-8">
+                  <Form>
+                    <div className="py-2 md:py-6 space-y-5">
+                      <div className="flex gap-8">
+                        <Input
+                          name="firstname"
+                          type="text"
+                          placeholder="Firstname"
+                          onChange={handleChange}
+                          value={values.firstname}
+                        />
+                        <Input
+                          name="lastname"
+                          type="text"
+                          placeholder="Lastname"
+                          onChange={handleChange}
+                        />
+                      </div>
                       <Input
-                        type="text"
-                        placeholder="Firstname"
-                        ref={inputFirstnameRef}
+                        name="email"
+                        type="email"
+                        placeholder="Email"
+                        onChange={handleChange}
                       />
-                      <Input
-                        type="text"
-                        placeholder="Lastname"
-                        ref={inputLastnameRef}
-                      />
+                      <div className="flex items-center justify-between border border-black pr-2">
+                        <Input
+                          name="password"
+                          type={typePass}
+                          placeholder="Password"
+                          className="border-none shadow-none"
+                          onChange={handleChange}
+                        />
+                        <Button
+                          type="button"
+                          className="shadow-none p-0"
+                          onClick={onHandleTypePass}
+                        >
+                          {typePass === "password" ? (
+                            <FaEye size={24} />
+                          ) : (
+                            <FaEyeSlash size={24} />
+                          )}
+                        </Button>
+                      </div>
+                      <div className="flex items-center justify-between border border-black pr-2">
+                        <Input
+                          name="confPassword"
+                          type={typePass}
+                          placeholder="Confirmation Password"
+                          className="border-none shadow-none"
+                          onChange={handleChange}
+                        />
+                        <Button
+                          type="button"
+                          className="shadow-none p-0"
+                          onClick={onHandleTypePass}
+                        >
+                          {typePass === "password" ? (
+                            <FaEye size={24} />
+                          ) : (
+                            <FaEyeSlash size={24} />
+                          )}
+                        </Button>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <Button
+                          type="submit"
+                          className="bg-gray-400 text-white px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-full shadow"
+                        >
+                          Sign Up
+                        </Button>
+                      </div>
                     </div>
-                    <Input
-                      type="email"
-                      placeholder="Email"
-                      ref={inputEmailRef}
-                    />
-                    <div className="flex items-center justify-between border border-black pr-2">
-                      <Input
-                        type={typePass}
-                        placeholder="Password"
-                        className="border-none shadow-none"
-                        ref={inputPasswordRef}
-                      />
-                      <Button
-                        type="button"
-                        className="shadow-none p-0"
-                        onClick={onHandleTypePass}
-                      >
-                        {typePass === "password" ? (
-                          <FaEye size={24} />
-                        ) : (
-                          <FaEyeSlash size={24} />
-                        )}
-                      </Button>
-                    </div>
-                    <div className="flex items-center justify-between border border-black pr-2">
-                      <Input
-                        type={typePass}
-                        placeholder="Confirmation Password"
-                        className="border-none shadow-none"
-                        ref={inputConfPasswordRef}
-                      />
-                      <Button
-                        type="button"
-                        className="shadow-none p-0"
-                        onClick={onHandleTypePass}
-                      >
-                        {typePass === "password" ? (
-                          <FaEye size={24} />
-                        ) : (
-                          <FaEyeSlash size={24} />
-                        )}
-                      </Button>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <Button
-                        type="button"
-                        onClick={onSignUp}
-                        className="bg-gray-400 text-white px-2 md:px-4 py-1 md:py-2 text-sm md:text-base rounded-full shadow"
-                      >
-                        Sign Up
-                      </Button>
-                    </div>
-                  </div>
+                  </Form>
                 );
               }}
             </Formik>

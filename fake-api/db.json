@@ -23,6 +23,13 @@
       "lastname": "Code",
       "email": "abdi@code.com",
       "password": "1234"
+    },
+    {
+      "id": "acbb",
+      "firstname": "aldi",
+      "lastname": "taher",
+      "email": "aldi@taher.com",
+      "password": "1234"
     }
   ]
 }
