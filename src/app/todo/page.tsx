@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Moon, Sun, Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { apiCall } from "@/utils/apiHelper";
 
 interface ITodo {
   id: number;
@@ -42,39 +43,34 @@ const TodoPage = () => {
   }, [filter]);
 
   const getTodos = () => {
-    setTodos([
-      {
-        id: 1,
-        task: "Help",
-        isDone: false,
-      },
-      {
-        id: 2,
-        task: "Task",
-        isDone: true,
-      },
-    ]);
+    // - memanggil url api data todos
+    apiCall
+      .get("/todos")
+      .then((response) => {
+        // - setelah mendapat response, data disimpan kedalam state todos
+        console.log(response.data);
+        setTodos(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  const onBtAdd = () => {
-    // - Pastikan input sudah diisi
-    if (inputTaskRef.current && inputTaskRef.current?.value) {
-      // - Ambil nilai dari element input
-      const task = inputTaskRef.current.value;
-      // - Duplikasi data dari state todos ke variable temporary
-      const temp: ITodo[] = [...todos];
-      // - Tambahkan data todo yang baru kedalam penampung temporary
-      temp.push({
-        id: temp.length + 1,
-        task,
-        isDone: false,
-      });
-      // - Memperbarui data pada state todos
-      setTodos(temp);
-      // - form input direset ulang nilainya
-      inputTaskRef.current.value = "";
-    } else {
-      alert("Form todo jangan sampai kosong");
+  const onBtAdd = async () => {
+    try {
+      // - Pastikan input sudah diisi
+      if (inputTaskRef.current && inputTaskRef.current?.value) {
+        const response = await apiCall.post("/todos", {
+          task: inputTaskRef.current.value,
+          isDone: false,
+        });
+
+        getTodos();
+      } else {
+        alert("Form todo jangan sampai kosong");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

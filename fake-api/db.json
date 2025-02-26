@@ -1,0 +1,26 @@
+{
+  "todos": [
+    {
+      "id": "1",
+      "task": "Help",
+      "isDone": false
+    },
+    {
+      "id": "b55f",
+      "task": "test",
+      "isDone": false
+    },
+    {
+      "id": "aa7e",
+      "task": "Test 2",
+      "isDone": false
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "ads123",
+      "password": "123"
+    }
+  ]
+}
