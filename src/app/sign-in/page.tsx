@@ -30,22 +30,23 @@ const SignInPage: React.FunctionComponent = () => {
 
   const onSignIn = async (values: IFormValue) => {
     try {
-      const response = await apiCall.get(
-        `/users?email=${values.email}&password=${values.password}`
+      const query = encodeURIComponent(
+        `email='${values.email}' AND password='${values.password}'`
       );
+      const response = await apiCall.get(`/account?where=${query}`);
       console.log(response.data);
 
       if (response.data.length === 1) {
         toast("Sign in berhasil");
         dispatch(
           setSignIn({
-            id: response.data[0].id,
+            id: response.data[0].objectId,
             firstname: response.data[0].firstname,
             lastname: response.data[0].lastname,
             email: response.data[0].email,
           })
         );
-        localStorage.setItem("auth", response.data[0].id);
+        localStorage.setItem("auth", response.data[0].objectId);
         router.replace("/todo");
       } else {
         throw "Akun tidak ditemukan";

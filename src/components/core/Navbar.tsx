@@ -28,11 +28,12 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
     try {
       const auth = localStorage.getItem("auth");
       if (auth) {
-        const response = await apiCall.get(`/users?id=${auth}`);
+        const query = encodeURIComponent(`objectId='${auth}'`);
+        const response = await apiCall.get(`/account?where=${query}`);
         if (response.data.length === 1) {
           dispatch(
             setSignIn({
-              id: response.data[0].id,
+              id: response.data[0].objectId,
               firstname: response.data[0].firstname,
               lastname: response.data[0].lastname,
               email: response.data[0].email,
