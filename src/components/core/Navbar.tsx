@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
 import { LanguageContext } from "@/contexts/LanguageContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hook";
 import { setEnglish, setIndonesian } from "@/lib/redux/features/languageSlice";
 import { Button } from "../ui/button";
+import { apiCall } from "@/utils/apiHelper";
+import { setSignIn, setSignOut } from "@/lib/redux/features/authSlice";
 
 interface INavbarProps {}
 
@@ -21,6 +23,31 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   const auth = useAppSelector((state) => {
     return state.authState;
   });
+
+  const keepLogin = async () => {
+    try {
+      const auth = localStorage.getItem("auth");
+      if (auth) {
+        const response = await apiCall.get(`/users?id=${auth}`);
+        if (response.data.length === 1) {
+          dispatch(
+            setSignIn({
+              id: response.data[0].id,
+              firstname: response.data[0].firstname,
+              lastname: response.data[0].lastname,
+              email: response.data[0].email,
+            })
+          );
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    keepLogin();
+  }, []);
 
   return (
     <nav className="flex justify-between items-center p-3 px-10">
@@ -67,7 +94,18 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
         </span>
         <span className="uppercase">{localStorage.getItem("mode")}</span>
         {auth.email ? (
-          <span>{auth.email}</span>
+          <>
+            <span>{auth.email}</span>
+            <Button
+              type="button"
+              onClick={() => {
+                dispatch(setSignOut());
+                localStorage.removeItem("auth");
+              }}
+            >
+              Sign Out
+            </Button>
+          </>
         ) : (
           <>
             <Link href="/sign-in">

@@ -45,6 +45,7 @@ const SignInPage: React.FunctionComponent = () => {
             email: response.data[0].email,
           })
         );
+        localStorage.setItem("auth", response.data[0].id);
         router.replace("/todo");
       } else {
         throw "Akun tidak ditemukan";
