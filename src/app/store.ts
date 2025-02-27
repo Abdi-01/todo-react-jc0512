@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import languageReducer from "@/lib/redux/features/languageSlice";
+import authReducer from "@/lib/redux/features/authSlice";
 export const store = configureStore({
   reducer: {
     // define reducer config here
     languageState: languageReducer,
+    authState: authReducer,
   },
 });
 

@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import Button from "./Button";
 import { LanguageContext } from "@/contexts/LanguageContext";
 import { useContext } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hook";
 import { setEnglish, setIndonesian } from "@/lib/redux/features/languageSlice";
+import { Button } from "../ui/button";
 
 interface INavbarProps {}
 
@@ -17,6 +17,9 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
   // Mengambil nilai dari state reducer
   const lang = useAppSelector((state) => {
     return state.languageState;
+  });
+  const auth = useAppSelector((state) => {
+    return state.authState;
   });
 
   return (
@@ -63,7 +66,18 @@ const Navbar: React.FunctionComponent<INavbarProps> = (props) => {
           {lang.value}
         </span>
         <span className="uppercase">{localStorage.getItem("mode")}</span>
-        <Button id="btn-signin" title="Sign In" />
+        {auth.email ? (
+          <span>{auth.email}</span>
+        ) : (
+          <>
+            <Link href="/sign-in">
+              <Button>Sign In</Button>
+            </Link>
+            <Link href="/sign-up">
+              <Button>Sign Up</Button>
+            </Link>
+          </>
+        )}
       </div>
     </nav>
   );

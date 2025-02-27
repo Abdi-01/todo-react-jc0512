@@ -19,12 +19,6 @@ interface IFormValue {
 }
 
 const SignUp = () => {
-  const inputFirstnameRef = useRef<HTMLInputElement>(null);
-  const inputLastnameRef = useRef<HTMLInputElement>(null);
-  const inputEmailRef = useRef<HTMLInputElement>(null);
-  const inputPasswordRef = useRef<HTMLInputElement>(null);
-  const inputConfPasswordRef = useRef<HTMLInputElement>(null);
-
   const [typePass, setTypePass] = React.useState<string>("password");
 
   const onHandleTypePass = () => {
