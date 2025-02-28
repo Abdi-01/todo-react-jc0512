@@ -31,7 +31,7 @@ const SignUp = () => {
 
   const onSignUp = async (values: IFormValue) => {
     try {
-      const response = await apiCall.post("/users", {
+      const response = await apiCall.post("/account", {
         firstname: values.firstname,
         lastname: values.lastname,
         email: values.email,
