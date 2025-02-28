@@ -7,6 +7,7 @@ import { Moon, Sun, Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { apiCall } from "@/utils/apiHelper";
+import { toast } from "react-toastify";
 
 interface ITodo {
   id: number;
@@ -64,6 +65,30 @@ const TodoPage = () => {
           task: inputTaskRef.current.value,
           isDone: false,
         });
+
+        console.log("Cek penambahan data todo", response.data);
+
+        // Konfigurasi relation data pada backendless
+        // - mendapatkan objectID acount dan objectID data todos yang baru ditambahkan
+        const accountId = localStorage.getItem("auth");
+        const todoId = response.data.objectId;
+
+        // - memperbarui data kolom relasi untuk masing-masing tabel yang dihubungkan
+        // kolom relasi table account ke todos
+        const resAccountToTodo = await apiCall.put(
+          `/account/${accountId}/todoList`,
+          {
+            objectIds: todoId,
+          }
+        );
+        // kolom relasi table todos ke account
+        const resTodoToAccount = await apiCall.put(
+          `/todos/${todoId}/accountData`,
+          {
+            objectIds: accountId,
+          }
+        );
+        toast("Tambah data todo berhasil");
 
         getTodos();
       } else {
