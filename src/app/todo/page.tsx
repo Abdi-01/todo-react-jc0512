@@ -8,9 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { apiCall } from "@/utils/apiHelper";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 interface ITodo {
-  id: number;
+  objectId: string;
   task: string;
   isDone: boolean;
 }
@@ -99,25 +100,25 @@ const TodoPage = () => {
     }
   };
 
-  const onBtDelete = (id: number) => {
-    // - mencari index dari data yang dipilih berdasarkan parameter id
-    const dataIdx = todos.findIndex((todo: ITodo) => {
-      return todo.id === id;
-    });
-    // - kemudian menyalin data state todos ke variable temporary
-    const temp: ITodo[] = [...todos];
-    // - menghapus data berdasarkan index yang ditemukan
-    temp.splice(dataIdx, 1);
-    // - memperbarui data todos
-    setTodos(temp);
-  };
+  // const onBtDelete = (id: number) => {
+  //   // - mencari index dari data yang dipilih berdasarkan parameter id
+  //   const dataIdx = todos.findIndex((todo: ITodo) => {
+  //     return todo.id === id;
+  //   });
+  //   // - kemudian menyalin data state todos ke variable temporary
+  //   const temp: ITodo[] = [...todos];
+  //   // - menghapus data berdasarkan index yang ditemukan
+  //   temp.splice(dataIdx, 1);
+  //   // - memperbarui data todos
+  //   setTodos(temp);
+  // };
 
-  const onBtIsDone = (id: number) => {
-    const dataIdx = todos.findIndex((todo: ITodo) => todo.id === id);
-    const temp = [...todos];
-    temp[dataIdx].isDone = !temp[dataIdx].isDone;
-    setTodos(temp);
-  };
+  // const onBtIsDone = (id: number) => {
+  //   const dataIdx = todos.findIndex((todo: ITodo) => todo.id === id);
+  //   const temp = [...todos];
+  //   temp[dataIdx].isDone = !temp[dataIdx].isDone;
+  //   setTodos(temp);
+  // };
 
   const printTodo = () => {
     let data: ITodo[] = [...todos];
@@ -129,22 +130,19 @@ const TodoPage = () => {
     return data.map((todo: ITodo, index: number) => {
       return (
         <li
-          key={todo.id}
+          key={todo.objectId}
           className="flex items-center justify-between py-2 border-b last:border-none"
         >
           <div className="flex items-center space-x-4 cursor-pointer">
             <Checkbox
               checked={todo.isDone}
               className="rounded-full w-6 h-6 border-2 border-gray-400"
-              onClick={() => onBtIsDone(todo.id)}
             />
-            <span>{todo.task}</span>
+            <span>
+              <Link href={`/todo/${todo.objectId}`}>{todo.task}</Link>
+            </span>
           </div>
-          <Button
-            type="button"
-            className="p-0 w-8 h-8 rounded-full"
-            onClick={() => onBtDelete(todo.id)}
-          >
+          <Button type="button" className="p-0 w-8 h-8 rounded-full">
             <Trash size={24} />
           </Button>
         </li>
